@@ -9,19 +9,20 @@
 #include<windows.h>
 //windowfunction
 void casewindow();
-void gotoxy(int,int);
+void gotoxy(int x,int y);
 void background();
 void window();
-void textcolor(int);
+void textcolor(int color);
+void bgcolor(int color,int bg);
 
 //processfunction
-void arrow(int,int);
-void move(int,int,int);
+void arrow(int point,int mode);
+void move(int point,int count,int mode);
 void stage();
 void stage1();
 void score();
 void help();
-void square(int,int,int,int,int);
+void square(int startx,int endx,int starty,int endy,int position);
 
 int main()
 {
@@ -80,36 +81,36 @@ void background()
 		
 	}
 }
-void square(int a,int b,int c,int d,int y)//y=place,a=startleft,b=lenght,c=startdown,d=height
+void square(int startx,int endx,int starty,int endy,int position)//y=place,a=startleft,b=lenght,c=startdown,d=height
 {
 	int i,j,k;
-	for(j=a;j<=b;j++)//line above horizon
+	for(j=startx;j<=endx;j++)//line above horizon
 	{
-		gotoxy(j,y);
+		gotoxy(j,position);
 		printf("\xcd");
 	}
-	gotoxy(a,y);//corner above right
+	gotoxy(startx,position);//corner above right
 	printf("%c",201);
-	for(k=c;k<=d;k++)//line vertical right
+	for(k=starty;k<=endy;k++)//line vertical right
 	{
-		gotoxy(a,k);
+		gotoxy(startx,k);
 		printf("%c\n",186);
 	}
-	gotoxy(b,y);
+	gotoxy(endx,position);
 	printf("%c",187);
-	for(k=c;k<=d;k++)//vertical left
+	for(k=starty;k<=endy;k++)//vertical left
 	{
-		gotoxy(b,k);
+		gotoxy(endx,k);
 		printf("%c",186);
 	}
-	for(j=a;j<=b;j++)//under line
+	for(j=startx;j<=endx;j++)//under line
 	{
-		gotoxy(j,d);
+		gotoxy(j,endy);
 		printf("\xcd");
 	}
-	gotoxy(a,d);
+	gotoxy(startx,endy);
 	printf("%c",200);
-	gotoxy(b,d);
+	gotoxy(endx,endy);
 	printf("%c",188);
 }
 void window()
@@ -192,7 +193,7 @@ void stage1()
 	system("cls");
 	window();
 }
-void arrow(int point,int x)
+void arrow(int point,int mode)
 {
 	int count=1; 
 	char word='0';
@@ -210,13 +211,13 @@ void arrow(int point,int x)
             if(count==0) count=point;
             break;}
         }
-		move(point,count,x);
+		move(point,count,mode);
 		word=getch();
 		if(word=='\r')
 		{
 			if(point==4)
 			{
-				switch(x)
+				switch(mode)
 				{
 					case 0:
 					{
@@ -238,41 +239,39 @@ void arrow(int point,int x)
 		}
 	}
 }
-void move(int point,int count,int x)
+void move(int point,int count,int mode)
 {
 	char *menu[2][4]={{"PLAY","SCORE","HELP","EXIT"},{"STAGE 1","STAGE 2","STAGE 3","STAGE 4"}};
-	//int pixel [][]
-	
 	if(point==4)
 	{
-		gotoxy(8,18); printf("  %s",menu[x][0]);
-		gotoxy(27,18); printf("  %s",menu[x][1]);
-		gotoxy(45,18); printf("  %s",menu[x][2]);
-		gotoxy(63,18); printf("  %s",menu[x][3]);
+		gotoxy(8,18); printf("  %s",menu[mode][0]);
+		gotoxy(27,18); printf("  %s",menu[mode][1]);
+		gotoxy(45,18); printf("  %s",menu[mode][2]);
+		gotoxy(63,18); printf("  %s",menu[mode][3]);
 		switch (count)
         {
         case 1:
         {
             gotoxy(7,18);
-            printf(" %c %s",16,menu[x][0]);
+            printf(" %c %s",16,menu[mode][0]);
             break;
     	}
         case 2:
         {
             gotoxy(26,18);
-            printf(" %c %s",16,menu[x][1]);
+            printf(" %c %s",16,menu[mode][1]);
             break;
     	}
         case 3:
         {
             gotoxy(44,18);
-            printf(" %c %s",16,menu[x][2]);
+            printf(" %c %s",16,menu[mode][2]);
             break;
     	}
         case 4:
         {
             gotoxy(62,18);
-            printf(" %c %s",16,menu[x][3]);
+            printf(" %c %s",16,menu[mode][3]);
             break;
         }
         }

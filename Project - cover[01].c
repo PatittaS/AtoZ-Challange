@@ -20,7 +20,7 @@ void arrow(int point,int mode);
 void move(int point,int count,int mode);
 void stage();
 void stage1();
-void score();
+void besttime();
 void help();
 void square(int startx,int endx,int starty,int endy,int position);
 
@@ -185,6 +185,31 @@ void stage()
 	arrow(4,1);
 	getch();
 }
+void besttime()
+{
+	system("cls");
+	FILE *article;
+	article=fopen("besttime.txt","r");
+	char c;
+	if(article==NULL)
+		printf("No");
+	else
+	{
+		do
+		{
+			//c=fgetc(article);
+			putchar(c=fgetc(article));
+		}while(c!=EOF);
+		fclose(article);
+	}
+	square(5,18,18,19,17);
+	square(24,37,18,19,17);
+	square(42,55,18,19,17);
+	square(60,73,18,19,17);
+	gotoxy(22,22); printf("Press spacebar to Back to main menu.");
+	arrow(4,2);
+	getch();
+}
 void stage1()
 {
 	system("cls");
@@ -222,9 +247,14 @@ void arrow(int point,int mode)
 					case 0:
 					{
 						if(count==1)stage();
+						else if(count==2) besttime();
 						else if(count==4) exit(0);
 					}
 					case 1:
+					{
+						if(count==1) stage1();
+					}
+					case 2:
 					{
 						if(count==1) stage1();
 					}
@@ -241,7 +271,8 @@ void arrow(int point,int mode)
 }
 void move(int point,int count,int mode)
 {
-	char *menu[2][4]={{"PLAY","SCORE","HELP","EXIT"},{"STAGE 1","STAGE 2","STAGE 3","STAGE 4"}};
+	char *menu[3][4]={{"PLAY","SCORE","HELP","EXIT"},{"STAGE 1","STAGE 2","STAGE 3","STAGE 4"},\
+	{"STAGE 1","STAGE 2","STAGE 3","STAGE 4"}};
 	if(point==4)
 	{
 		gotoxy(8,18); printf("  %s",menu[mode][0]);
